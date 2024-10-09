@@ -1,4 +1,5 @@
 Eleicoes-2024 🗳️
+
 Eleicoes-2024 é uma aplicação desenvolvida para acompanhar e processar dados eleitorais em tempo real. A aplicação coleta informações sobre candidatos e apurações diretamente de fontes públicas, oferecendo uma interface dinâmica para visualização e análise dos dados.
 
 ⚙️ Funcionalidades
@@ -17,7 +18,7 @@ JSON: Para armazenamento e processamento das informações dos partidos, candida
 
 bash
 Copiar código
-git clone https://github.com/seu-usuario/eleicoes-2024.git
+git clone https://github.com/fabiocosta25/eleicoes-2024.git
 cd eleicoes-2024
 Construa e inicie os containers Docker:
 
