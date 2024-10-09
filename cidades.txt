@@ -1,0 +1,43 @@
+Vale
+Aparecida: sp61492
+Arapeí: sp61646
+Areias: sp61697
+Atibaia: sp61816
+Bananal: sp61972
+Bom Jesus dos Perdões: sp62413
+Bragança Paulista: sp62510
+Cachoeira Paulista: sp62731
+Canas: sp62103
+Caçapava: sp62715
+Cruzeiro: sp63690
+Cunha: sp63738
+Guararema: sp64670
+Guaratinguetá: sp64696
+Igaratá: sp65056
+Jacareí: sp65897
+Jambeiro: sp65994
+Joanópolis: sp66117
+Lagoinha: sp66273
+Lavrinhas: sp66338
+Lorena: sp66451
+Monteiro Lobato: sp67350
+Natividade da Serra: sp67474
+Paraibuna: sp68136
+Pindamonhangaba: sp68616
+Piquete: sp68713
+Potim: sp61565
+Roseira: sp69876
+São José dos Campos: sp70998
+Silveiras: sp71412
+Taubaté: sp71838
+Tremembé: sp71978
+Ubatuba: sp72095
+Vargem: sp61549
+Serra
+Campos do Jordão: sp62952
+Santo Antonio do Pinhal: sp70653
+São Bento do Sapucaí: sp70734
+Litoral
+São Sebastião: sp71153
+Ilhabela: sp65099
+Caraguatatuba: sp63118

@@ -1,0 +1,22 @@
+services:
+  frontend:
+    build:
+      context: .
+      target: nginx-frontend
+    container_name: eleicoes-frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/usr/share/nginx/html
+    restart: always
+
+  backend:
+    build:
+      context: .
+      target: python-backend
+    container_name: eleicoes-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./dados:/app
+    restart: always

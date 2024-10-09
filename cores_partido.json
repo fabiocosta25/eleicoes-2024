@@ -1,0 +1,121 @@
+{
+    "partidos": [
+      {
+        "nome": "AGIR",
+        "cor": "#2c609d"
+      },
+      {
+        "nome": "AVANTE",
+        "cor": "#5f8d8e"
+      },
+      {
+        "nome": "CID",
+        "cor": "#c63c94"
+      },
+      {
+        "nome": "DC",
+        "cor": "#ab7c24"
+      },
+      {
+        "nome": "MDB",
+        "cor": "#4F9961"
+      },
+      {
+        "nome": "MOB",
+        "cor": "#cf7676"
+      },
+      {
+        "nome": "NOVO",
+        "cor": "#497677"
+      },
+      {
+        "nome": "PCB",
+        "cor": "#e63345"
+      },
+      {
+        "nome": "PCdoB",
+        "cor": "#800313"
+      },
+      {
+        "nome": "PCO",
+        "cor": "#923d00"
+      },
+      {
+        "nome": "PDT",
+        "cor": "#2569ad"
+      },
+      {
+        "nome": "PL",
+        "cor": "#30306d"
+      },
+      {
+        "nome": "PMB",
+        "cor": "#892a4b"
+      },
+      {
+        "nome": "PODE",
+        "cor": "#658c4c"
+      },
+      {
+        "nome": "PP",
+        "cor": "#2fa9af"
+      },
+      {
+        "nome": "PRD",
+        "cor": "#009b95"
+      },
+      {
+        "nome": "PRTB",
+        "cor": "#23488c"
+      },
+      {
+        "nome": "PSB",
+        "cor": "#d35224"
+      },
+      {
+        "nome": "PSD",
+        "cor": "#a0a00b"
+      },
+      {
+        "nome": "PSDB",
+        "cor": "#1c69b3"
+      },
+      {
+        "nome": "PSOL",
+        "cor": "#e08500"
+      },
+      {
+        "nome": "PSTU",
+        "cor": "#ce5252"
+      },
+      {
+        "nome": "PT",
+        "cor": "#c0122d"
+      },
+      {
+        "nome": "PV",
+        "cor": "#034701"
+      },
+      {
+        "nome": "REDE",
+        "cor": "#666666"
+      },
+      {
+        "nome": "REP",
+        "cor": "#385e7e"
+      },
+      {
+        "nome": "SD",
+        "cor": "#d86f3a"
+      },
+      {
+        "nome": "UNIÃO",
+        "cor": "#3a91af"
+      },
+      {
+        "nome": "UP",
+        "cor": "#333333"
+      }
+    ]
+  }
+  

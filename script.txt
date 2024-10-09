@@ -1,0 +1,271 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const candidateList = document.querySelector(".candidates-list");
+    const cityCheckboxes = document.querySelectorAll(".city-checkbox");
+    const regionSubtitle = document.getElementById("regionSubtitle");
+    const refreshButton = document.getElementById("refreshButton");
+
+    // Mapeamento de códigos de cidades para seus nomes
+    const cityNames = {
+        "sp61492": "Aparecida",
+        "sp61646": "Arapeí",
+        "sp61697": "Areias",
+        "sp61816": "Atibaia",
+        "sp61972": "Bananal",
+        "sp62413": "Bom Jesus dos Perdões",
+        "sp62510": "Bragança Paulista",
+        "sp62731": "Cachoeira Paulista",
+        "sp62103": "Canas",
+        "sp62715": "Caçapava",
+        "sp63690": "Cruzeiro",
+        "sp63738": "Cunha",
+        "sp64670": "Guararema",
+        "sp64696": "Guaratinguetá",
+        "sp65056": "Igaratá",
+        "sp65897": "Jacareí",
+        "sp65994": "Jambeiro",
+        "sp66117": "Joanópolis",
+        "sp66273": "Lagoinha",
+        "sp66338": "Lavrinhas",
+        "sp66451": "Lorena",
+        "sp67350": "Monteiro Lobato",
+        "sp67474": "Natividade da Serra",
+        "sp68136": "Paraibuna",
+        "sp68616": "Pindamonhangaba",
+        "sp68713": "Piquete",
+        "sp61565": "Potim",
+        "sp69876": "Roseira",
+        "sp70998": "São José dos Campos",
+        "sp71412": "Silveiras",
+        "sp71838": "Taubaté",
+        "sp71978": "Tremembé",
+        "sp72095": "Ubatuba",
+        "sp61549": "Vargem",
+        "sp62952": "Campos do Jordão",
+        "sp70653": "Santo Antonio do Pinhal",
+        "sp70734": "São Bento do Sapucaí",
+        "sp71153": "São Sebastião",
+        "sp65099": "Ilhabela",
+        "sp63118": "Caraguatatuba"
+    };
+
+    // Adicionando o CSS diretamente no script
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+            margin-bottom: 0rem;
+        }
+        .progress-label {
+            font-size: 1rem;
+            color: #4B5563;
+        }
+            
+        .progress-bar {
+            width: 450px;
+            height: 0.8rem;
+            background-color: #D1D5DB;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin: 0 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .progress-fill {
+            background-color: #1554b3;
+            height: 100%;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .candidate-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 0rem;
+        }
+        .candidate-percentage {
+            margin-right: 7rem;
+            color: #002BFF;
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+        .candidate-votes {
+            margin-left: 7rem;
+            margin-top: 2rem;
+            margin-bottom: 0rem;
+        }
+        .eleito {
+            color: green;
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: absolute;
+            top: 50px; /* Ajusta conforme necessário */
+            left: 10px; /* Ajusta conforme necessário para posicionar ao lado da imagem */
+        }
+        .segundo-turno {
+            color: orange;
+            font-weight: bold;
+            font-size: 1.5rem;
+            position: absolute;
+            top: 40px; /* Ajusta conforme necessário para ficar logo abaixo de 'Eleito' */
+            left: 0px; /* Mantém o alinhamento com a imagem */
+            text-align: center; /* Mantém o texto alinhado à esquerda */
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Função para carregar os dados dos candidatos
+    function loadCandidatesData() {
+        fetch('dados_unificados.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Dados carregados com sucesso:", data);
+                window.candidates = [];
+                data.forEach(cityData => {
+                    const cityCode = cityData.Cidade;
+                    const cityCandidates = cityData.Candidatos;
+                    cityCandidates.forEach(candidate => {
+                        const votos_computados = parseInt(candidate.votos.replace(/\./g, '')) || 0;
+                        const percentual_votos = parseFloat(candidate.percentual_votos.replace(',', '.')) || 0;
+
+                        window.candidates.push({
+                            nome: candidate.nome,
+                            partido: candidate.partido,
+                            votos: votos_computados,
+                            percentual_votos: percentual_votos,
+                            cidade: cityCode
+                        });
+                    });
+                });
+                filterCandidates();
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados dos candidatos:', error);
+                displayErrorMessage('Erro ao carregar dados dos candidatos. Tente novamente mais tarde.');
+            });
+    }
+
+    // Função para exibir mensagens de erro
+    function displayErrorMessage(message) {
+        const errorMessageElement = document.createElement('div');
+        errorMessageElement.className = 'error-message';
+        errorMessageElement.textContent = message;
+        candidateList.innerHTML = ""; // Limpar lista anterior
+        candidateList.appendChild(errorMessageElement);
+    }
+
+    // Função para filtrar os candidatos com base nas cidades selecionadas e ordená-los
+    function filterCandidates() {
+        const selectedCities = Array.from(cityCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        // Atualizar o subtítulo com os nomes das cidades
+        if (selectedCities.length > 0) {
+            const selectedCityNames = selectedCities.map(code => cityNames[code]).join(", ");
+            regionSubtitle.textContent = `| ${selectedCityNames}`;
+        } else {
+            regionSubtitle.textContent = "| Região";
+        }
+
+        candidateList.innerHTML = "";
+
+        if (window.candidates) {
+            // Ordena os candidatos em ordem decrescente de percentual de votos
+            const sortedCandidates = window.candidates
+                .filter(candidate => selectedCities.includes(candidate.cidade))
+                .sort((a, b) => b.percentual_votos - a.percentual_votos);
+
+            // Verifica candidatos com 100% dos votos
+            const candidatesWith100Percent = sortedCandidates.filter(candidate => candidate.percentual_votos === 100);
+            const isSecondTurn = candidatesWith100Percent.length > 1;
+
+            const fragment = document.createDocumentFragment();
+            sortedCandidates.forEach(candidate => {
+                const candidateHTML = document.createElement('div');
+                candidateHTML.className = "candidate-container";
+                const candidateLabel = candidate.percentual_votos === 100 
+                    ? (isSecondTurn ? '<span class="segundo-turno">Segundo<br>Turno</span>' : '<span class="eleito">Eleito</span>') 
+                    : '';
+
+                candidateHTML.innerHTML = `
+                    <div> 
+                        <img src="/src/img/base/BASE_CANDIDATO.png" alt="Base Candidato" class="candidate-base">
+                        <img src="/src/img/base/foto_candidato.png" alt="foto Candidato" class="candidate-foto">
+                    </div>
+                    <div class="candidate text-center">
+                        <h2 class="titlecandidato">${candidate.nome} <span class="subtitlecandidato">|${candidate.partido} ${candidateLabel ? "<br>" + candidateLabel : ""}</span></h2>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${candidate.percentual_votos}%"></div>
+                            </div>
+                        </div>
+                        <div class="candidate-info">
+                            <p class="candidate-percentage">${candidate.percentual_votos}%</p>
+                            <p class="candidate-votes">Votos: ${candidate.votos.toLocaleString()}</p>
+                        </div>
+                    </div>
+                `;
+                fragment.appendChild(candidateHTML);
+            });
+            candidateList.appendChild(fragment);
+        }
+    }
+
+    // Função para garantir que apenas um checkbox possa ser selecionado por vez
+    function handleCheckboxChange(event) {
+        cityCheckboxes.forEach(checkbox => {
+            if (checkbox !== event.target) {
+                checkbox.checked = false;
+            }
+        });
+        filterCandidates();
+    }
+
+    // Função para restaurar o estado dos checkboxes a partir do localStorage
+    function restoreCheckboxState() {
+        const selectedCity = localStorage.getItem('selectedCity');
+        if (selectedCity) {
+            const checkbox = document.getElementById(selectedCity);
+            if (checkbox) {
+                checkbox.checked = true;
+                filterCandidates(); // Refiltra com a cidade restaurada
+            }
+        }
+    }
+
+    // Função para salvar a seleção do checkbox no localStorage
+    function saveCheckboxState(event) {
+        const checkbox = event.target;
+        if (checkbox.checked) {
+            localStorage.setItem('selectedCity', checkbox.id);
+        } else {
+            localStorage.removeItem('selectedCity');
+        }
+    }
+
+    // Adicionar evento para salvar a seleção no localStorage
+    cityCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", saveCheckboxState);
+        checkbox.addEventListener("change", handleCheckboxChange); // Atualiza a seleção ao mudar
+    });
+
+    // Adicionar evento para atualizar os dados ao clicar no botão
+    refreshButton.addEventListener("click", loadCandidatesData);
+
+    // Carregar dados e restaurar o estado dos checkboxes ao carregar a página
+    loadCandidatesData();
+    restoreCheckboxState();
+});
